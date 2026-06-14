@@ -1,0 +1,20 @@
+./build/bin/tpcc_driver -t 4 -d 60 -S 10
+[driver] host=127.0.0.1 port=8765 warehouses=1 threads=4 duration=60s scale=10 items=10000 cust/dist=300
+=========== TPC-C Result ===========
+duration:  60.1718 s
+committed: 668
+aborted:   2691
+TPS (commit/s): 11.1015
+tpmC (NewOrder/min approx): 299.742
+latency p50/p95/p99 (us): 192 / 1025200 / 1219771
+
+
+./build/bin/tpcc_driver -t 4 -d 300 -S 1
+[driver] host=127.0.0.1 port=8765 warehouses=1 threads=4 duration=300s scale=1 items=100000 cust/dist=3000
+=========== TPC-C Result ===========
+duration:  307.892 s
+committed: 442
+aborted:   3588
+TPS (commit/s): 1.43557
+tpmC (NewOrder/min approx): 38.7604
+latency p50/p95/p99 (us): 182 / 947181 / 19298351

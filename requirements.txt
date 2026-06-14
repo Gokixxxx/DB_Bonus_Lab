@@ -1,0 +1,5 @@
+# 系统依赖:
+#   sudo apt install cmake>=3.13 gcc>=7.3 flex bison
+
+# 磁盘空间要求: >= 5GB
+# 操作系统: Linux (CentOS 7 / Ubuntu 20.04 已验证)
