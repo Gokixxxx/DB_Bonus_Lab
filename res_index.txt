@@ -10,3 +10,11 @@ latency p50/p95/p99 (us): 1087 / 5406 / 70014
 
 
 ./build/bin/tpcc_driver -t 4 -d 300 -S 1
+[driver] host=127.0.0.1 port=8765 warehouses=1 threads=4 duration=300s scale=1 items=100000 cust/dist=3000
+=========== TPC-C Result ===========
+duration:  301.352 s
+committed: 16470
+aborted:   657
+TPS (commit/s): 54.6537
+tpmC (NewOrder/min approx): 1475.65
+latency p50/p95/p99 (us): 2740 / 1165679 / 1219675

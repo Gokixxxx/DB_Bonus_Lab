@@ -388,7 +388,18 @@ page_id_t IxIndexHandle::insert_entry(const char *key, const Rid &value, Transac
 
     // 1. 空树：根节点也是叶子，直接插入
     if (is_empty()) {
+        // 树被删空后，root_page_ = IX_NO_PAGE
+        // 需要重新初始化根节点
+        file_hdr_->root_page_ = IX_INIT_ROOT_PAGE;
+        file_hdr_->first_leaf_ = IX_INIT_ROOT_PAGE;
+        file_hdr_->last_leaf_ = IX_INIT_ROOT_PAGE;
         IxNodeHandle *root = fetch_node(file_hdr_->root_page_);
+        // 确保根节点是干净的叶子节点
+        root->page_hdr->is_leaf = true;
+        root->page_hdr->num_key = 0;
+        root->page_hdr->parent = IX_NO_PAGE;
+        root->page_hdr->prev_leaf = IX_LEAF_HEADER_PAGE;
+        root->page_hdr->next_leaf = IX_LEAF_HEADER_PAGE;
         root->insert_pairs(0, key, &value, 1);
         buffer_pool_manager_->unpin_page(root->get_page_id(), true);
         delete root;
@@ -403,7 +414,7 @@ page_id_t IxIndexHandle::insert_entry(const char *key, const Rid &value, Transac
     
     // 4. 检查是否需要分裂
     page_id_t leaf_page_no = leaf->get_page_no();
-    if (leaf->get_size() > leaf->get_max_size()) {
+    if (leaf->get_size() >= leaf->get_max_size()) {
         IxNodeHandle *new_leaf = split(leaf);
         insert_into_parent(leaf, new_leaf->get_key(0), new_leaf, transaction);
         buffer_pool_manager_->unpin_page(new_leaf->get_page_id(), true);
