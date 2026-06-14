@@ -244,6 +244,8 @@ std::pair<IxNodeHandle *, bool> IxIndexHandle::find_leaf_page(const char *key, O
  * @return bool 返回目标键值对是否存在
  */
 bool IxIndexHandle::get_value(const char *key, std::vector<Rid> *result, Transaction *transaction) {
+    std::lock_guard<std::recursive_mutex> lock(tree_latch_);      // 锁_
+
     // 1. 找到叶子节点
     auto [leaf, root_latched] = find_leaf_page(key, Operation::FIND, transaction);
     if (leaf == nullptr) {
@@ -294,8 +296,9 @@ IxNodeHandle *IxIndexHandle::split(IxNodeHandle *node) {
         new_node->set_next_leaf(node->get_next_leaf());
         new_node->set_prev_leaf(node->get_page_no());
         
-        if (node->get_next_leaf() != IX_NO_PAGE) {
-            IxNodeHandle *next_node = fetch_node(node->get_next_leaf());
+        page_id_t next_no = node->get_next_leaf();
+        if (next_no != IX_NO_PAGE && next_no != IX_LEAF_HEADER_PAGE) {
+            IxNodeHandle *next_node = fetch_node(next_no);
             next_node->set_prev_leaf(new_node->get_page_no());
             buffer_pool_manager_->unpin_page(next_node->get_page_id(), true);
             delete next_node;
@@ -381,6 +384,8 @@ void IxIndexHandle::insert_into_parent(IxNodeHandle *old_node, const char *key,
  * @return page_id_t 插入到的叶结点的page_no
  */
 page_id_t IxIndexHandle::insert_entry(const char *key, const Rid &value, Transaction *transaction) {
+    std::lock_guard<std::recursive_mutex> lock(tree_latch_);     // 锁_
+
     // 1. 空树：根节点也是叶子，直接插入
     if (is_empty()) {
         IxNodeHandle *root = fetch_node(file_hdr_->root_page_);
@@ -419,6 +424,8 @@ page_id_t IxIndexHandle::insert_entry(const char *key, const Rid &value, Transac
  * @param transaction 事务指针
  */
 bool IxIndexHandle::delete_entry(const char *key, Transaction *transaction) {
+    std::lock_guard<std::recursive_mutex> lock(tree_latch_);      // 锁_
+
     // 1. 找到叶子节点
     auto [leaf, root_latched] = find_leaf_page(key, Operation::DELETE, transaction);
     if (leaf == nullptr) {
@@ -624,12 +631,14 @@ bool IxIndexHandle::coalesce(IxNodeHandle **neighbor_node, IxNodeHandle **node, 
             file_hdr_->last_leaf_ = (*neighbor_node)->get_page_no();
         }
         page_id_t node_next = (*node)->get_next_leaf();
-        (*neighbor_node)->set_next_leaf(node_next);
-        if (node_next != IX_NO_PAGE) {
+        if (node_next != IX_NO_PAGE && node_next != IX_LEAF_HEADER_PAGE) {
+            (*neighbor_node)->set_next_leaf(node_next);
             IxNodeHandle *next_node = fetch_node(node_next);
             next_node->set_prev_leaf((*neighbor_node)->get_page_no());
             buffer_pool_manager_->unpin_page(next_node->get_page_id(), true);
             delete next_node;
+        } else {
+            (*neighbor_node)->set_next_leaf(IX_LEAF_HEADER_PAGE);
         }
     }
     // 5. 从parent删除指向node的entry
@@ -651,12 +660,16 @@ bool IxIndexHandle::coalesce(IxNodeHandle **neighbor_node, IxNodeHandle **node, 
  * @note iid和rid存的不是一个东西，rid是上层传过来的记录位置，iid是索引内部生成的索引槽位置
  */
 Rid IxIndexHandle::get_rid(const Iid &iid) const {
+    std::lock_guard<std::recursive_mutex> lock(tree_latch_);      // 锁_
+
     IxNodeHandle *node = fetch_node(iid.page_no);
     if (iid.slot_no >= node->get_size()) {
         throw IndexEntryNotFoundError();
     }
-    buffer_pool_manager_->unpin_page(node->get_page_id(), false);  // unpin it!
-    return *node->get_rid(iid.slot_no);
+    Rid result = *node->get_rid(iid.slot_no);
+    buffer_pool_manager_->unpin_page(node->get_page_id(), false);
+    delete node;
+    return result;
 }
 
 /**
@@ -674,6 +687,8 @@ Rid IxIndexHandle::get_rid(const Iid &iid) const {
  * @return Iid 指向第一个 >= key 的叶子节点中的位置；若不存在则返回 leaf_end()
  */
 Iid IxIndexHandle::lower_bound(const char *key) {
+    std::lock_guard<std::recursive_mutex> lock(tree_latch_);      // 锁_
+
     if (is_empty()) return leaf_end();
     auto [leaf, _root_latched] = find_leaf_page(key, Operation::FIND, nullptr);
     int idx = leaf->lower_bound(key);
@@ -702,6 +717,8 @@ Iid IxIndexHandle::lower_bound(const char *key) {
  * @return Iid 指向第一个 > key 的位置。
  */
 Iid IxIndexHandle::upper_bound(const char *key) {
+    std::lock_guard<std::recursive_mutex> lock(tree_latch_);      // 锁_
+    
     if (is_empty()) return leaf_end();
     auto [leaf, _root_latched] = find_leaf_page(key, Operation::FIND, nullptr);
     int idx = leaf->upper_bound(key);
@@ -729,6 +746,8 @@ Iid IxIndexHandle::upper_bound(const char *key) {
  * @return Iid
  */
 Iid IxIndexHandle::leaf_end() const {
+    std::lock_guard<std::recursive_mutex> lock(tree_latch_);      // 锁_
+
     IxNodeHandle *node = fetch_node(file_hdr_->last_leaf_);
     Iid iid = {.page_no = file_hdr_->last_leaf_, .slot_no = node->get_size()};
     buffer_pool_manager_->unpin_page(node->get_page_id(), false);  // unpin it!
@@ -742,6 +761,8 @@ Iid IxIndexHandle::leaf_end() const {
  * @return Iid
  */
 Iid IxIndexHandle::leaf_begin() const {
+    std::lock_guard<std::recursive_mutex> lock(tree_latch_);      // 锁_
+
     Iid iid = {.page_no = file_hdr_->first_leaf_, .slot_no = 0};
     return iid;
 }
@@ -813,13 +834,22 @@ void IxIndexHandle::maintain_parent(IxNodeHandle *node) {
 void IxIndexHandle::erase_leaf(IxNodeHandle *leaf) {
     assert(leaf->is_leaf_page());
 
-    IxNodeHandle *prev = fetch_node(leaf->get_prev_leaf());
-    prev->set_next_leaf(leaf->get_next_leaf());
-    buffer_pool_manager_->unpin_page(prev->get_page_id(), true);
-
-    IxNodeHandle *next = fetch_node(leaf->get_next_leaf());
-    next->set_prev_leaf(leaf->get_prev_leaf());  // 注意此处是SetPrevLeaf()
-    buffer_pool_manager_->unpin_page(next->get_page_id(), true);
+    page_id_t prev_no = leaf->get_prev_leaf();
+    page_id_t next_no = leaf->get_next_leaf();
+    
+    if (prev_no != IX_NO_PAGE && prev_no != IX_LEAF_HEADER_PAGE) {
+        IxNodeHandle *prev = fetch_node(prev_no);
+        prev->set_next_leaf(next_no);
+        buffer_pool_manager_->unpin_page(prev->get_page_id(), true);
+        delete prev;
+    }
+    
+    if (next_no != IX_NO_PAGE && next_no != IX_LEAF_HEADER_PAGE) {
+        IxNodeHandle *next = fetch_node(next_no);
+        next->set_prev_leaf(prev_no);
+        buffer_pool_manager_->unpin_page(next->get_page_id(), true);
+        delete next;
+    }
 }
 
 /**

@@ -169,6 +169,8 @@ class IxIndexHandle {
     IxFileHdr* file_hdr_;                       // 存了root_page，但其初始化为2（第0页存FILE_HDR_PAGE，第1页存LEAF_HEADER_PAGE）
     std::mutex root_latch_;
 
+    mutable std::recursive_mutex tree_latch_;             // 保护所有 B+ 树操作的互斥锁_
+
    public:
     IxIndexHandle(DiskManager *disk_manager, BufferPoolManager *buffer_pool_manager, int fd);
 
