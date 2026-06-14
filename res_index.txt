@@ -1,0 +1,5 @@
+./build/bin/tpcc_driver -t 4 -d 60 -S 10
+
+
+
+./build/bin/tpcc_driver -t 4 -d 300 -S 1

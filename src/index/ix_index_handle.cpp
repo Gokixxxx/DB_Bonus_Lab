@@ -428,13 +428,8 @@ bool IxIndexHandle::delete_entry(const char *key, Transaction *transaction) {
     int old_size = leaf->get_size();
     leaf->remove(key);
 
-    /*
-    // 3. 如果删除后下溢，调用coalesce_or_redistribute
-    if (leaf->get_size() < leaf->get_min_size()) {
-        bool root_is_latched = false;
-        coalesce_or_redistribute(leaf, transaction, &root_is_latched);
-    }
-    */
+    // 3. 删除后下溢简便起见不合并，防止并发错误
+    // 由于整个任务中删除占比很小，因此这么做不会对性能产生较大影响
    
     // 4. 释放叶子节点
     buffer_pool_manager_->unpin_page(leaf->get_page_id(), true);
