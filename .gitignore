@@ -35,7 +35,6 @@ instructor.*
 
 # Database runtime files
 testdb/
-tpcc/
 *.db
 *.log
 *.idx
