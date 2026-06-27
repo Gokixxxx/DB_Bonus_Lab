@@ -64,6 +64,7 @@ class IndexScanExecutor : public AbstractExecutor {
     }
 
     void beginTuple() override {
+        // 表级 IS 锁（和 IX 兼容，读写可以并发）
         if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
             context_->lock_mgr_->lock_IS_on_table(context_->txn_, fh_->GetFd());
         }

@@ -38,6 +38,7 @@ class InsertExecutor : public AbstractExecutor {
     };
 
     std::unique_ptr<RmRecord> Next() override {
+        // 对表加 IX 意向排他锁
         if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
             context_->lock_mgr_->lock_IX_on_table(context_->txn_, fh_->GetFd());
         }
@@ -47,7 +48,7 @@ class InsertExecutor : public AbstractExecutor {
             auto &col = tab_.cols[i];
             auto &val = values_[i];
             if (col.type != val.type) {
-                throw IncompatibleTypeError(coltype2str(col->type), coltype2str(val.type));
+                throw IncompatibleTypeError(coltype2str(col.type), coltype2str(val.type));
             }
             val.init_raw(col.len);
             memcpy(rec.data + col.offset, val.raw->data, col.len);
@@ -55,10 +56,12 @@ class InsertExecutor : public AbstractExecutor {
         
         rid_ = fh_->insert_record(rec.data, context_);
 
+        // 对新插入的行加 X 锁
         if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
             context_->lock_mgr_->lock_exclusive_on_record(context_->txn_, rid_, fh_->GetFd());
         }
 
+        // 记录 write 集，供 abort 时回滚
         if (context_ != nullptr && context_->txn_ != nullptr) {
             context_->txn_->append_write_record(
                 new WriteRecord(WType::INSERT_TUPLE, tab_name_, rid_));

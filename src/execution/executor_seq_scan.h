@@ -46,6 +46,7 @@ class SeqScanExecutor : public AbstractExecutor {
     }
 
     void beginTuple() override {
+        // 表级 IS 锁（和 IX 兼容，读写可以并发）
         if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
             context_->lock_mgr_->lock_IS_on_table(context_->txn_, fh_->GetFd());
         }
@@ -53,6 +54,7 @@ class SeqScanExecutor : public AbstractExecutor {
         scan_ = std::make_unique<RmScan>(fh_);
         while (!scan_->is_end()) {
             rid_ = scan_->rid();
+            // 先加行级 S 锁，再读记录（避免并发删除导致 Page not exists）
             if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
                 context_->lock_mgr_->lock_shared_on_record(context_->txn_, rid_, fh_->GetFd());
             }
@@ -67,6 +69,7 @@ class SeqScanExecutor : public AbstractExecutor {
     void nextTuple() override {
         for (scan_->next(); !scan_->is_end(); scan_->next()) {
             rid_ = scan_->rid();
+            // 先加行级 S 锁，再读记录
             if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
                 context_->lock_mgr_->lock_shared_on_record(context_->txn_, rid_, fh_->GetFd());
             }

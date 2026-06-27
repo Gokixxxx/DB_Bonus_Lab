@@ -22,17 +22,19 @@ static const std::string GroupLockModeStr[10] = {"NON_LOCK", "IS", "IX", "S", "X
 /**
  * @brief 多粒度锁管理器：表级意向锁 + 行级 S/X 锁 + Wait-Die 死锁预防
  *
- * 锁协议：
- * 1. 多粒度锁：IS / IX / S / X / SIX
+ * 核心改造：
+ * 1. 完整的多粒度锁协议：IS / IX / S / X / SIX
  *    - 加行级 S 锁前，先对表加 IS 锁
  *    - 加行级 X 锁前，先对表加 IX 锁
  *    - 意向锁之间互不冲突，意向锁与全表锁按兼容性矩阵判定
  *
  * 2. Wait-Die 死锁预防：
- *    - 老事务遇到年轻事务持锁：等待
- *    - 年轻事务遇到老事务持锁：abort
+ *    - 老事务遇到年轻事务持锁 → 等待
+ *    - 年轻事务遇到老事务持锁 → abort
  *
- * 3. 严格 2PL：commit/abort 时统一释放所有锁
+ * 3. 锁升级优化：S→X 升级时按 Wait-Die 处理，不直接 abort
+ *
+ * 4. 严格 2PL：commit/abort 时由 TransactionManager 统一释放所有锁
  */
 class LockManager {
 public:

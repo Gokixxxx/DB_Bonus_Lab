@@ -55,6 +55,8 @@ void TransactionManager::abort(Transaction * txn, LogManager *log_manager) {
     if (txn == nullptr) return;
 
     auto write_set = txn->get_write_set();
+    // 倒序回滚所有写操作，加 try-catch 保护
+    // 避免回滚时访问已删除的记录/页面导致异常，进而 std::terminate 段错误
     while (!write_set->empty()) {
         WriteRecord *wr = write_set->back();
         write_set->pop_back();

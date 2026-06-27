@@ -11,7 +11,8 @@ See the Mulan PSL v2 for more details. */
 #include "lock_manager.h"
 #include "transaction/txn_defs.h"
 
-// 锁兼容性矩阵
+// ==================== 辅助函数：锁兼容性矩阵 ====================
+
 bool LockManager::is_compatible(LockMode request_mode, GroupLockMode current_mode) {
     if (current_mode == GroupLockMode::NON_LOCK) {
         return true;
@@ -95,6 +96,8 @@ void LockManager::recompute_group_mode(LockRequestQueue& q) {
     q.group_lock_mode_ = strongest;
 }
 
+// ==================== 核心加锁逻辑 ====================
+
 bool LockManager::lock_internal(Transaction* txn, LockDataId id, LockMode mode) {
     if (txn == nullptr) return true;
     if (txn->get_state() == TransactionState::ABORTED) {
@@ -110,7 +113,7 @@ bool LockManager::lock_internal(Transaction* txn, LockDataId id, LockMode mode) 
     auto &q = lock_table_[id];
     auto txn_id = txn->get_transaction_id();
 
-    // 检查重复加锁或锁升级
+    // 检查此事务是否已经对该资源持有锁（重复加锁 / 锁升级）
     for (auto it = q.request_queue_.begin(); it != q.request_queue_.end(); ++it) {
         if (it->txn_id_ == txn_id) {
             if (it->granted_) {
@@ -186,7 +189,7 @@ bool LockManager::lock_internal(Transaction* txn, LockDataId id, LockMode mode) 
         }
     }
 
-    // 新请求
+    // 全新请求：检查兼容性 + Wait-Die 死锁预防
     bool can_grant = is_compatible(mode, q.group_lock_mode_);
 
     if (!can_grant) {
@@ -243,11 +246,14 @@ bool LockManager::lock_internal(Transaction* txn, LockDataId id, LockMode mode) 
     return true;
 }
 
+// ==================== 对外接口：表级锁 ====================
+
 bool LockManager::lock_shared_on_table(Transaction* txn, int tab_fd) {
     if (txn == nullptr) return true;
     LockDataId id(tab_fd, LockDataType::TABLE);
 
-    // 已持有 IX/X/SIX 锁时无需再加 S 锁，避免锁升级冲突
+    // 优化：如果事务已经持有了该表的 IX/X/SIX 锁（写操作），不需要再加 S 锁
+    // 避免 IX + S → SIX 的锁升级，SIX 和其他 IX 不兼容，会导致大量 abort
     {
         std::unique_lock<std::mutex> lk(latch_);
         auto it = lock_table_.find(id);
@@ -274,6 +280,8 @@ bool LockManager::lock_exclusive_on_table(Transaction* txn, int tab_fd) {
     return lock_internal(txn, id, LockMode::EXLUCSIVE);
 }
 
+// ==================== 对外接口：意向锁（IS / IX）====================
+
 bool LockManager::lock_IS_on_table(Transaction* txn, int tab_fd) {
     if (txn == nullptr) return true;
     LockDataId id(tab_fd, LockDataType::TABLE);
@@ -286,6 +294,8 @@ bool LockManager::lock_IX_on_table(Transaction* txn, int tab_fd) {
     return lock_internal(txn, id, LockMode::INTENTION_EXCLUSIVE);
 }
 
+// ==================== 对外接口：行级锁 ====================
+
 bool LockManager::lock_shared_on_record(Transaction* txn, const Rid& rid, int tab_fd) {
     if (txn == nullptr) return true;
     LockDataId id(tab_fd, rid, LockDataType::RECORD);
@@ -297,6 +307,8 @@ bool LockManager::lock_exclusive_on_record(Transaction* txn, const Rid& rid, int
     LockDataId id(tab_fd, rid, LockDataType::RECORD);
     return lock_internal(txn, id, LockMode::EXLUCSIVE);
 }
+
+// ==================== 解锁逻辑 ====================
 
 bool LockManager::unlock(Transaction* txn, LockDataId lock_data_id) {
     if (txn == nullptr) return true;
@@ -324,7 +336,8 @@ bool LockManager::unlock(Transaction* txn, LockDataId lock_data_id) {
     return true;
 }
 
-// Wait-Die 死锁预防
+// ==================== Wait-Die 死锁预防 ====================
+
 bool LockManager::check_wait_die(Transaction* txn, LockRequestQueue& q, LockMode request_mode) {
     auto my_ts = txn->get_start_ts();
     auto txn_id = txn->get_transaction_id();

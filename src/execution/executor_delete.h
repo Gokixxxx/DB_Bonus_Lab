@@ -38,27 +38,31 @@ class DeleteExecutor : public AbstractExecutor {
     }
 
     std::unique_ptr<RmRecord> Next() override {
+        // 对表加 IX 意向排他锁
         if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
             context_->lock_mgr_->lock_IX_on_table(context_->txn_, fh_->GetFd());
         }
 
-        // 按 rid 排序加锁，避免循环等待死锁
+        // 按 rid 排序后再加锁，避免循环等待导致死锁
         std::sort(rids_.begin(), rids_.end(), [](const Rid& a, const Rid& b) {
             if (a.page_no != b.page_no) return a.page_no < b.page_no;
             return a.slot_no < b.slot_no;
         });
 
         for (auto &rid : rids_) {
+            // 对行加 X 锁
             if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
                 context_->lock_mgr_->lock_exclusive_on_record(context_->txn_, rid, fh_->GetFd());
             }
 
             auto rec = fh_->get_record(rid, context_);
 
+            // 保存被删除的记录到 write_set，供 abort 回滚
             if (context_ != nullptr && context_->txn_ != nullptr) {
                 context_->txn_->append_write_record(
                     new WriteRecord(WType::DELETE_TUPLE, tab_name_, rid, *rec));
             }
+            // 从索引中删除对应的key
             for (size_t i = 0; i < tab_.indexes.size(); ++i) {
                 auto &index = tab_.indexes[i];
                 auto ih = sm_manager_->ihs_.at(sm_manager_->get_ix_manager()->get_index_name(tab_name_, index.cols)).get();
