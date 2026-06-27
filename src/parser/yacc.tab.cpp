@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 1 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 1 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
 
 #include "ast.h"
 #include "yacc.tab.h"
@@ -82,7 +82,7 @@ void yyerror(YYLTYPE *locp, const char* s) {
 
 using namespace ast;
 
-#line 86 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 86 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -1629,507 +1629,507 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* start: stmt ';'  */
-#line 57 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 57 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         parse_tree = (yyvsp[-1].sv_node);
         YYACCEPT;
     }
-#line 1638 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1638 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 3: /* start: HELP  */
-#line 62 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 62 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         parse_tree = std::make_shared<Help>();
         YYACCEPT;
     }
-#line 1647 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1647 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 4: /* start: EXIT  */
-#line 67 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 67 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         parse_tree = nullptr;
         YYACCEPT;
     }
-#line 1656 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1656 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 5: /* start: T_EOF  */
-#line 72 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 72 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         parse_tree = nullptr;
         YYACCEPT;
     }
-#line 1665 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1665 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 10: /* txnStmt: TXN_BEGIN  */
-#line 87 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 87 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<TxnBegin>();
     }
-#line 1673 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1673 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 11: /* txnStmt: TXN_COMMIT  */
-#line 91 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 91 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<TxnCommit>();
     }
-#line 1681 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1681 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 12: /* txnStmt: TXN_ABORT  */
-#line 95 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 95 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<TxnAbort>();
     }
-#line 1689 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1689 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 13: /* txnStmt: TXN_ROLLBACK  */
-#line 99 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 99 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<TxnRollback>();
     }
-#line 1697 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1697 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 14: /* dbStmt: SHOW TABLES  */
-#line 106 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 106 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<ShowTables>();
     }
-#line 1705 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1705 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 15: /* ddl: CREATE TABLE tbName '(' fieldList ')'  */
-#line 113 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 113 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<CreateTable>((yyvsp[-3].sv_str), (yyvsp[-1].sv_fields));
     }
-#line 1713 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1713 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 16: /* ddl: DROP TABLE tbName  */
-#line 117 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 117 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<DropTable>((yyvsp[0].sv_str));
     }
-#line 1721 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1721 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 17: /* ddl: DESC tbName  */
-#line 121 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 121 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<DescTable>((yyvsp[0].sv_str));
     }
-#line 1729 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1729 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 18: /* ddl: CREATE INDEX tbName '(' colNameList ')'  */
-#line 125 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 125 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<CreateIndex>((yyvsp[-3].sv_str), (yyvsp[-1].sv_strs));
     }
-#line 1737 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1737 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 19: /* ddl: DROP INDEX tbName '(' colNameList ')'  */
-#line 129 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 129 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<DropIndex>((yyvsp[-3].sv_str), (yyvsp[-1].sv_strs));
     }
-#line 1745 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1745 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 20: /* dml: INSERT INTO tbName VALUES '(' valueList ')'  */
-#line 136 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 136 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<InsertStmt>((yyvsp[-4].sv_str), (yyvsp[-1].sv_vals));
     }
-#line 1753 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1753 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 21: /* dml: DELETE FROM tbName optWhereClause  */
-#line 140 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 140 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<DeleteStmt>((yyvsp[-1].sv_str), (yyvsp[0].sv_conds));
     }
-#line 1761 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1761 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 22: /* dml: UPDATE tbName SET setClauses optWhereClause  */
-#line 144 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 144 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<UpdateStmt>((yyvsp[-3].sv_str), (yyvsp[-1].sv_set_clauses), (yyvsp[0].sv_conds));
     }
-#line 1769 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1769 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 23: /* dml: SELECT selector FROM tableList optWhereClause opt_order_clause  */
-#line 148 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 148 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_node) = std::make_shared<SelectStmt>((yyvsp[-4].sv_cols), (yyvsp[-2].sv_strs), (yyvsp[-1].sv_conds), (yyvsp[0].sv_orderby));
     }
-#line 1777 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1777 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 24: /* fieldList: field  */
-#line 155 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 155 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_fields) = std::vector<std::shared_ptr<Field>>{(yyvsp[0].sv_field)};
     }
-#line 1785 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1785 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 25: /* fieldList: fieldList ',' field  */
-#line 159 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 159 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_fields).push_back((yyvsp[0].sv_field));
     }
-#line 1793 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1793 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 26: /* colNameList: colName  */
-#line 166 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 166 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_strs) = std::vector<std::string>{(yyvsp[0].sv_str)};
     }
-#line 1801 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1801 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 27: /* colNameList: colNameList ',' colName  */
-#line 170 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 170 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_strs).push_back((yyvsp[0].sv_str));
     }
-#line 1809 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1809 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 28: /* field: colName type  */
-#line 177 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 177 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_field) = std::make_shared<ColDef>((yyvsp[-1].sv_str), (yyvsp[0].sv_type_len));
     }
-#line 1817 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1817 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 29: /* type: INT  */
-#line 184 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 184 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_type_len) = std::make_shared<TypeLen>(SV_TYPE_INT, sizeof(int));
     }
-#line 1825 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1825 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 30: /* type: CHAR '(' VALUE_INT ')'  */
-#line 188 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 188 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_type_len) = std::make_shared<TypeLen>(SV_TYPE_STRING, (yyvsp[-1].sv_int));
     }
-#line 1833 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1833 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 31: /* type: FLOAT  */
-#line 192 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 192 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_type_len) = std::make_shared<TypeLen>(SV_TYPE_FLOAT, sizeof(float));
     }
-#line 1841 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1841 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 32: /* valueList: value  */
-#line 199 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 199 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_vals) = std::vector<std::shared_ptr<Value>>{(yyvsp[0].sv_val)};
     }
-#line 1849 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1849 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 33: /* valueList: valueList ',' value  */
-#line 203 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 203 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_vals).push_back((yyvsp[0].sv_val));
     }
-#line 1857 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1857 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 34: /* value: VALUE_INT  */
-#line 210 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 210 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_val) = std::make_shared<IntLit>((yyvsp[0].sv_int));
     }
-#line 1865 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1865 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 35: /* value: VALUE_FLOAT  */
-#line 214 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 214 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_val) = std::make_shared<FloatLit>((yyvsp[0].sv_float));
     }
-#line 1873 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1873 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 36: /* value: VALUE_STRING  */
-#line 218 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 218 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_val) = std::make_shared<StringLit>((yyvsp[0].sv_str));
     }
-#line 1881 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1881 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 37: /* condition: col op expr  */
-#line 225 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 225 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_cond) = std::make_shared<BinaryExpr>((yyvsp[-2].sv_col), (yyvsp[-1].sv_comp_op), (yyvsp[0].sv_expr));
     }
-#line 1889 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1889 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 38: /* optWhereClause: %empty  */
-#line 231 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 231 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
                       { /* ignore*/ }
-#line 1895 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1895 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 39: /* optWhereClause: WHERE whereClause  */
-#line 233 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 233 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_conds) = (yyvsp[0].sv_conds);
     }
-#line 1903 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1903 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 40: /* whereClause: condition  */
-#line 240 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 240 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_conds) = std::vector<std::shared_ptr<BinaryExpr>>{(yyvsp[0].sv_cond)};
     }
-#line 1911 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1911 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 41: /* whereClause: whereClause AND condition  */
-#line 244 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 244 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_conds).push_back((yyvsp[0].sv_cond));
     }
-#line 1919 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1919 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 42: /* col: tbName '.' colName  */
-#line 251 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 251 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_col) = std::make_shared<Col>((yyvsp[-2].sv_str), (yyvsp[0].sv_str));
     }
-#line 1927 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1927 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 43: /* col: colName  */
-#line 255 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 255 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_col) = std::make_shared<Col>("", (yyvsp[0].sv_str));
     }
-#line 1935 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1935 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 44: /* colList: col  */
-#line 262 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 262 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_cols) = std::vector<std::shared_ptr<Col>>{(yyvsp[0].sv_col)};
     }
-#line 1943 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1943 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 45: /* colList: colList ',' col  */
-#line 266 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 266 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_cols).push_back((yyvsp[0].sv_col));
     }
-#line 1951 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1951 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 46: /* op: '='  */
-#line 273 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 273 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_comp_op) = SV_OP_EQ;
     }
-#line 1959 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1959 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 47: /* op: '<'  */
-#line 277 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 277 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_comp_op) = SV_OP_LT;
     }
-#line 1967 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1967 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 48: /* op: '>'  */
-#line 281 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 281 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_comp_op) = SV_OP_GT;
     }
-#line 1975 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1975 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 49: /* op: NEQ  */
-#line 285 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 285 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_comp_op) = SV_OP_NE;
     }
-#line 1983 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1983 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 50: /* op: LEQ  */
-#line 289 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 289 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_comp_op) = SV_OP_LE;
     }
-#line 1991 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1991 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 51: /* op: GEQ  */
-#line 293 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 293 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_comp_op) = SV_OP_GE;
     }
-#line 1999 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 1999 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 52: /* expr: value  */
-#line 300 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 300 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_expr) = std::static_pointer_cast<Expr>((yyvsp[0].sv_val));
     }
-#line 2007 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2007 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 53: /* expr: col  */
-#line 304 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 304 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_expr) = std::static_pointer_cast<Expr>((yyvsp[0].sv_col));
     }
-#line 2015 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2015 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 54: /* setClauses: setClause  */
-#line 311 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 311 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_set_clauses) = std::vector<std::shared_ptr<SetClause>>{(yyvsp[0].sv_set_clause)};
     }
-#line 2023 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2023 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 55: /* setClauses: setClauses ',' setClause  */
-#line 315 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 315 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_set_clauses).push_back((yyvsp[0].sv_set_clause));
     }
-#line 2031 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2031 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 56: /* setClause: colName '=' value  */
-#line 322 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 322 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_set_clause) = std::make_shared<SetClause>((yyvsp[-2].sv_str), (yyvsp[0].sv_val));
     }
-#line 2039 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2039 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 57: /* setClause: colName '=' colName '+' value  */
-#line 326 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 326 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         // col = col + value (TPC-C 里常见)
         (yyval.sv_set_clause) = std::make_shared<SetClause>((yyvsp[-4].sv_str), (yyvsp[0].sv_val), SV_SET_PLUS);
     }
-#line 2048 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2048 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 58: /* setClause: colName '=' colName '-' value  */
-#line 331 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 331 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         // col = col - value
         (yyval.sv_set_clause) = std::make_shared<SetClause>((yyvsp[-4].sv_str), (yyvsp[0].sv_val), SV_SET_MINUS);
     }
-#line 2057 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2057 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 59: /* selector: '*'  */
-#line 339 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 339 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_cols) = {};
     }
-#line 2065 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2065 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 61: /* tableList: tbName  */
-#line 347 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 347 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_strs) = std::vector<std::string>{(yyvsp[0].sv_str)};
     }
-#line 2073 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2073 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 62: /* tableList: tableList ',' tbName  */
-#line 351 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 351 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_strs).push_back((yyvsp[0].sv_str));
     }
-#line 2081 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2081 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 63: /* tableList: tableList JOIN tbName  */
-#line 355 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 355 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     {
         (yyval.sv_strs).push_back((yyvsp[0].sv_str));
     }
-#line 2089 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2089 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 64: /* opt_order_clause: ORDER BY order_clause  */
-#line 362 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 362 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     { 
         (yyval.sv_orderby) = (yyvsp[0].sv_orderby); 
     }
-#line 2097 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2097 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 65: /* opt_order_clause: %empty  */
-#line 365 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 365 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
                       { /* ignore*/ }
-#line 2103 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2103 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 66: /* order_clause: col opt_asc_desc  */
-#line 370 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 370 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
     { 
         (yyval.sv_orderby) = std::make_shared<OrderBy>((yyvsp[-1].sv_col), (yyvsp[0].sv_orderby_dir));
     }
-#line 2111 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2111 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 67: /* opt_asc_desc: ASC  */
-#line 376 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 376 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
                  { (yyval.sv_orderby_dir) = OrderBy_ASC;     }
-#line 2117 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2117 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 68: /* opt_asc_desc: DESC  */
-#line 377 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 377 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
                  { (yyval.sv_orderby_dir) = OrderBy_DESC;    }
-#line 2123 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2123 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
   case 69: /* opt_asc_desc: %empty  */
-#line 378 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 378 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
             { (yyval.sv_orderby_dir) = OrderBy_DEFAULT; }
-#line 2129 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2129 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
     break;
 
 
-#line 2133 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
+#line 2133 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.tab.cpp"
 
       default: break;
     }
@@ -2358,5 +2358,5 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 384 "/mnt/e/gx/FDU/db/lab/lab6/DB_Bonus_Lab/src/parser/yacc.y"
+#line 384 "/mnt/d/数据库/bonus/DB_Bonus_Lab/src/parser/yacc.y"
 

@@ -14,6 +14,7 @@ See the Mulan PSL v2 for more details. */
 #include "executor_abstract.h"
 #include "index/ix.h"
 #include "system/sm.h"
+#include <algorithm>
 
 class DeleteExecutor : public AbstractExecutor {
    private:
@@ -37,20 +38,27 @@ class DeleteExecutor : public AbstractExecutor {
     }
 
     std::unique_ptr<RmRecord> Next() override {
-        // 表级 X 锁
         if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
-            context_->lock_mgr_->lock_exclusive_on_table(context_->txn_, fh_->GetFd());
+            context_->lock_mgr_->lock_IX_on_table(context_->txn_, fh_->GetFd());
         }
+
+        // 按 rid 排序加锁，避免循环等待死锁
+        std::sort(rids_.begin(), rids_.end(), [](const Rid& a, const Rid& b) {
+            if (a.page_no != b.page_no) return a.page_no < b.page_no;
+            return a.slot_no < b.slot_no;
+        });
+
         for (auto &rid : rids_) {
-            // 先获取记录数据（用于删除索引、并保存于 write_set 以供回滚）
+            if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
+                context_->lock_mgr_->lock_exclusive_on_record(context_->txn_, rid, fh_->GetFd());
+            }
+
             auto rec = fh_->get_record(rid, context_);
 
-            // 记录 write 集
             if (context_ != nullptr && context_->txn_ != nullptr) {
                 context_->txn_->append_write_record(
                     new WriteRecord(WType::DELETE_TUPLE, tab_name_, rid, *rec));
             }
-            // 从索引中删除
             for (size_t i = 0; i < tab_.indexes.size(); ++i) {
                 auto &index = tab_.indexes[i];
                 auto ih = sm_manager_->ihs_.at(sm_manager_->get_ix_manager()->get_index_name(tab_name_, index.cols)).get();
@@ -63,7 +71,6 @@ class DeleteExecutor : public AbstractExecutor {
                 ih->delete_entry(key, context_->txn_);
                 delete[] key;
             }
-            // 从记录文件中删除
             fh_->delete_record(rid, context_);
         }
         return nullptr;

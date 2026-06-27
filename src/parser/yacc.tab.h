@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_MNT_E_GX_FDU_DB_LAB_LAB6_DB_BONUS_LAB_SRC_PARSER_YACC_TAB_H_INCLUDED
-# define YY_YY_MNT_E_GX_FDU_DB_LAB_LAB6_DB_BONUS_LAB_SRC_PARSER_YACC_TAB_H_INCLUDED
+#ifndef YY_YY_MNT_D_BONUS_DB_BONUS_LAB_SRC_PARSER_YACC_TAB_H_INCLUDED
+# define YY_YY_MNT_D_BONUS_DB_BONUS_LAB_SRC_PARSER_YACC_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -119,4 +119,4 @@ struct YYLTYPE
 int yyparse (void);
 
 
-#endif /* !YY_YY_MNT_E_GX_FDU_DB_LAB_LAB6_DB_BONUS_LAB_SRC_PARSER_YACC_TAB_H_INCLUDED  */
+#endif /* !YY_YY_MNT_D_BONUS_DB_BONUS_LAB_SRC_PARSER_YACC_TAB_H_INCLUDED  */

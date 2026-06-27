@@ -21,7 +21,7 @@ class InsertExecutor : public AbstractExecutor {
     std::vector<Value> values_;     // 需要插入的数据
     RmFileHandle *fh_;              // 表的数据文件句柄
     std::string tab_name_;          // 表名称
-    Rid rid_;                       // 插入的位置，由于系统默认插入时不指定位置，因此当前rid_在插入后才赋值
+    Rid rid_;                       // 插入的位置
     SmManager *sm_manager_;
 
    public:
@@ -38,31 +38,32 @@ class InsertExecutor : public AbstractExecutor {
     };
 
     std::unique_ptr<RmRecord> Next() override {
-        // 表级 X 锁
         if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
-            context_->lock_mgr_->lock_exclusive_on_table(context_->txn_, fh_->GetFd());
+            context_->lock_mgr_->lock_IX_on_table(context_->txn_, fh_->GetFd());
         }
-        // Make record buffer
+
         RmRecord rec(fh_->get_file_hdr().record_size);
         for (size_t i = 0; i < values_.size(); i++) {
             auto &col = tab_.cols[i];
             auto &val = values_[i];
             if (col.type != val.type) {
-                throw IncompatibleTypeError(coltype2str(col.type), coltype2str(val.type));
+                throw IncompatibleTypeError(coltype2str(col->type), coltype2str(val.type));
             }
             val.init_raw(col.len);
             memcpy(rec.data + col.offset, val.raw->data, col.len);
         }
-        // Insert into record file
+        
         rid_ = fh_->insert_record(rec.data, context_);
 
-        // 记录 write 集，供 abort 时列反向回滚
+        if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
+            context_->lock_mgr_->lock_exclusive_on_record(context_->txn_, rid_, fh_->GetFd());
+        }
+
         if (context_ != nullptr && context_->txn_ != nullptr) {
             context_->txn_->append_write_record(
                 new WriteRecord(WType::INSERT_TUPLE, tab_name_, rid_));
         }
         
-        // Insert into index
         for(size_t i = 0; i < tab_.indexes.size(); ++i) {
             auto& index = tab_.indexes[i];
             auto ih = sm_manager_->ihs_.at(sm_manager_->get_ix_manager()->get_index_name(tab_name_, index.cols)).get();
@@ -73,6 +74,7 @@ class InsertExecutor : public AbstractExecutor {
                 offset += index.cols[i].len;
             }
             ih->insert_entry(key, rid_, context_->txn_);
+            delete[] key;
         }
         return nullptr;
     }

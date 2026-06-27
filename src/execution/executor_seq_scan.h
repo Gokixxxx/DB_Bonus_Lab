@@ -45,22 +45,17 @@ class SeqScanExecutor : public AbstractExecutor {
         fed_conds_ = conds_;
     }
 
-    /**
-     * @brief 构建表迭代器scan_,并开始迭代扫描,直到扫描到第一个满足谓词条件的元组停止,并赋值给rid_
-     *
-     */
     void beginTuple() override {
-        // 表级 S 锁：纯读路径加共享锁，让多个只读事务可以并发，
-        // 同时与并发的 UPDATE/DELETE/INSERT（X 锁）保持互斥；
-        // 若同一事务后续走到 update/delete/insert，会触发 S→X 升级，
-        // lock_manager 已对升级冲突走死锁预防（abort）。
         if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
-            context_->lock_mgr_->lock_shared_on_table(context_->txn_, fh_->GetFd());
+            context_->lock_mgr_->lock_IS_on_table(context_->txn_, fh_->GetFd());
         }
+
         scan_ = std::make_unique<RmScan>(fh_);
-        // 找到第一个满足谓词条件的元组
         while (!scan_->is_end()) {
             rid_ = scan_->rid();
+            if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
+                context_->lock_mgr_->lock_shared_on_record(context_->txn_, rid_, fh_->GetFd());
+            }
             auto rec = fh_->get_record(rid_, context_);
             if (eval_conds(cols_, fed_conds_, rec.get())) {
                 break;
@@ -69,14 +64,12 @@ class SeqScanExecutor : public AbstractExecutor {
         }
     }
 
-    /**
-     * @brief 从当前scan_指向的记录开始迭代扫描,直到扫描到第一个满足谓词条件的元组停止,并赋值给rid_
-     *
-     */
     void nextTuple() override {
-        // 从当前scan_指向的记录开始迭代扫描
         for (scan_->next(); !scan_->is_end(); scan_->next()) {
             rid_ = scan_->rid();
+            if (context_ != nullptr && context_->lock_mgr_ != nullptr && context_->txn_ != nullptr) {
+                context_->lock_mgr_->lock_shared_on_record(context_->txn_, rid_, fh_->GetFd());
+            }
             auto rec = fh_->get_record(rid_, context_);
             if (eval_conds(cols_, fed_conds_, rec.get())) {
                 break;
@@ -86,8 +79,6 @@ class SeqScanExecutor : public AbstractExecutor {
 
     /**
      * @brief 返回下一个满足扫描条件的记录
-     *
-     * @return std::unique_ptr<RmRecord>
      */
     std::unique_ptr<RmRecord> Next() override {
         return fh_->get_record(rid_, context_);
