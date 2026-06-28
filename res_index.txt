@@ -1,3 +1,5 @@
+# The experimental results of adding B+ tree indexes
+
 ./build/bin/tpcc_driver -t 4 -d 60 -S 10
 [driver] host=127.0.0.1 port=8765 warehouses=1 threads=4 duration=60s scale=10 items=10000 cust/dist=300
 =========== TPC-C Result ===========
