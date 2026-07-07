@@ -366,7 +366,7 @@ void IxIndexHandle::insert_into_parent(IxNodeHandle *old_node, const char *key,
     
     new_node->set_parent_page_no(parent->get_page_no());
     
-    if (parent->get_size() > parent->get_max_size()) {
+    if (parent->get_size() >= parent->get_max_size()) { // fixed
         IxNodeHandle *new_parent = split(parent);
         insert_into_parent(parent, new_parent->get_key(0), new_parent, transaction);
         buffer_pool_manager_->unpin_page(new_parent->get_page_id(), true);
